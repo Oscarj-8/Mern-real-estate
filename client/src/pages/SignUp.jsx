@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 export default function SignUp() {
   const [formData, setFormData] = useState({});
-
+  const [error, setError] = useState(null);
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -11,8 +11,17 @@ export default function SignUp() {
     console.log(formData);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const res = await fetch("/api/auth/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+    const data = await res.json();
+    console.log(data);
   };
 
   return (
