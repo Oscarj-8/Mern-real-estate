@@ -3,6 +3,8 @@ import { useState } from "react";
 export default function SignUp() {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -13,6 +15,7 @@ export default function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const res = await fetch("/api/auth/signup", {
       method: "POST",
       headers: {
@@ -21,7 +24,13 @@ export default function SignUp() {
       body: JSON.stringify(formData),
     });
     const data = await res.json();
+    if (data.success === false) {
+      setLoading(false);
+      setError(data.message);
+      return;
+    }
     console.log(data);
+    setLoading(false);
   };
 
   return (
@@ -49,8 +58,11 @@ export default function SignUp() {
           id="password"
           onChange={handleChange}
         />
-        <button className="bg-slate-700 rounded-lg text-white p-3 uppercase hover:opacity-90 disabled:opacity-80">
-          Sign Up
+        <button
+          disabled={loading}
+          className="bg-slate-700 rounded-lg text-white p-3 uppercase hover:opacity-90 disabled:opacity-80"
+        >
+          {loading ? "Loading..." : "Sign Up"}
         </button>
       </form>
       <div className="flex gap-2 mt-5">
@@ -59,6 +71,7 @@ export default function SignUp() {
           <span className="text-blue-700">Sign in</span>
         </Link>
       </div>
+      {error && <p className="text-red-500 mt-5">{error}</p>}
     </div>
   );
 }
