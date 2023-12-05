@@ -9,8 +9,23 @@ export const signup = async (req, res, next) => {
 
   try {
     await newUser.save();
-
     res.status(201).json("User created Successfuly");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const signin = async (res, req, next) => {
+  const { email, password } = req.body;
+
+  try {
+    const validUser = await User.findOne({ email });
+    if (!validUser) return next(errorHandler(404, "User not found"));
+    const validPassword = await bcrypt.compareSync(
+      password,
+      validPassword.password
+    );
+    if (!validPassword) return next(errorHandler(401, "Wrong credentials"));
   } catch (error) {
     next(error);
   }
