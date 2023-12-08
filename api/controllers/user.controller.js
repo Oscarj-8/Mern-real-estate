@@ -3,3 +3,5 @@ export const test = (req, res) => {
     message: "Hey dude",
   });
 };
+
+export const userUpdate = async (req, res, next) => {};
