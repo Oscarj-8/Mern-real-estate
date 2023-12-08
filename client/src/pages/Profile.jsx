@@ -60,12 +60,12 @@ export default function Profile() {
         />
         <img
           onClick={() => fileRef.current.click()}
-          className="rounded-full w-24 object-cover
+          className="rounded-full w-24 
           self-center
           mt-2
           hover:cursor-pointer
           "
-          src={currentUser.avatar}
+          src={formData.avatar || currentUser.avatar}
         />
         {fileUploadError ? (
           <span className="text-red-700 text-center">Image Upload Error</span>
