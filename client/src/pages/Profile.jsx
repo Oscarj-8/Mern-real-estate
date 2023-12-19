@@ -22,6 +22,7 @@ export default function Profile() {
   const [fileUploadPerc, setFileUploadPerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
+  const [userUpdated, setUserUpdated] = useState(false);
 
   useEffect(() => {
     if (file) {
@@ -75,6 +76,7 @@ export default function Profile() {
       }
 
       dispatch(updateUserSuccess(data));
+      setUserUpdated(true);
     } catch (error) {
       dispatch(updateUserFailure(error.message));
     }
@@ -83,6 +85,7 @@ export default function Profile() {
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-center text-3xl font-semibold my-7">Profile</h1>
+
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           onChange={(e) => setFile(e.target.files[0])}
@@ -153,6 +156,9 @@ export default function Profile() {
         <span className="text-red-700 cursor-pointer">Sign out</span>
       </div>
       <p className="text-red-700 text-center">{error ? error : ""}</p>
+      <p className="text-green-700 text-center">
+        {userUpdated ? "User is updated successfully" : ""}
+      </p>
     </div>
   );
 }
