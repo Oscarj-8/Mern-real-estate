@@ -31,7 +31,7 @@ export default function OAuth() {
       });
       const data = await res.json();
       dispatch(signInSuccess(data));
-      console.log(result);
+      // console.log(result);
       navigate("/");
     } catch (error) {
       console.log("Could not sign in with Google");
