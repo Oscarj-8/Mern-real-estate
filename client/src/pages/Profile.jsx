@@ -1,5 +1,4 @@
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
 import {
   getDownloadURL,
@@ -25,13 +24,11 @@ export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const fileRef = useRef(null);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [file, setFile] = useState(undefined);
   const [fileUploadPerc, setFileUploadPerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
   const [userUpdated, setUserUpdated] = useState(false);
-  // const navigate = useNavigate();
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
@@ -103,7 +100,6 @@ export default function Profile() {
         return;
       }
       dispatch(deleteUserSuccess(data));
-      navigate("/sign-in");
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
     }
