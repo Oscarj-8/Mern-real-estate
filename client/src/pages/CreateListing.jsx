@@ -6,8 +6,9 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-
+import { useSelector } from "react-redux";
 export default function CreateListing() {
+  const { currentUser } = useSelector((state) => state.user);
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
     imageUrls: [],
@@ -27,6 +28,8 @@ export default function CreateListing() {
   });
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   console.log(formData);
 
   const handleImageSubmit = () => {
@@ -93,6 +96,42 @@ export default function CreateListing() {
   const handleChange = (e) => {
     if (e.target.id === "sale" || e.target.id === "rent") {
       setFormData({ ...formData, type: e.target.id });
+    } else if (
+      e.target.id == "parking" ||
+      e.target.id == "offer" ||
+      e.target.id == "furnished"
+    ) {
+      setFormData({ ...formData, [e.target.id]: e.target.checked });
+    } else {
+      setFormData({ ...formData, [e.target.id]: e.target.value });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Form Data:", formData);
+    try {
+      setLoading(true);
+      setError(false);
+
+      const res = await fetch("/api/listing/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({ ...formData, userRef: currentUser._id }),
+      });
+
+      const data = await res.json();
+      setLoading(false);
+
+      if (data.success === false) {
+        setError(data.message);
+      }
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
     }
   };
 
@@ -101,7 +140,7 @@ export default function CreateListing() {
       <h1 className="text-3xl font-semibold text-center my-7">
         Create a Listing
       </h1>
-      <form className="flex flex-col sm:flex-row gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-4 flex-1">
           <input
             type="text"
@@ -304,8 +343,9 @@ export default function CreateListing() {
               </div>
             ))}
           <button className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-90 disabled:opacity-80">
-            Create List
+            {loading ? "Creating..." : "Create List"}
           </button>
+          {error && <p className="text-red-700 text-sm">{error}</p>}
         </div>
       </form>
     </main>
