@@ -15,8 +15,6 @@ export default function CreateListing() {
     name: "",
     description: "",
     address: "",
-    // sale: false,
-    // rent: false,
     type: "rent",
     bathrooms: 1,
     bedrooms: 1,
@@ -109,6 +107,8 @@ export default function CreateListing() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.imageUrls.length < 1)
+      return setError("You must atleast upload one image");
     console.log("Form Data:", formData);
     try {
       setLoading(true);
