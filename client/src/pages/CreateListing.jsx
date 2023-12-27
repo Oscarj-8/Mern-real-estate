@@ -19,7 +19,7 @@ export default function CreateListing() {
     bathrooms: 1,
     bedrooms: 1,
     regularPrice: 50,
-    discountedPrice: 25,
+    discountedPrice: 0,
     offer: false,
     parking: false,
     furnished: false,
@@ -280,7 +280,7 @@ export default function CreateListing() {
               <div className="flex gap-2 items-center">
                 <input
                   type="number"
-                  min="25"
+                  min="0"
                   max="1000000000"
                   name="discountedPrice"
                   id="discountedPrice"
@@ -346,7 +346,10 @@ export default function CreateListing() {
                 </button>
               </div>
             ))}
-          <button className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-90 disabled:opacity-80">
+          <button
+            disabled={loading || uploading}
+            className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-90 disabled:opacity-80"
+          >
             {loading ? "Creating..." : "Create List"}
           </button>
           {error && <p className="text-red-700 text-sm">{error}</p>}
