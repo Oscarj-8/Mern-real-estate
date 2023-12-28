@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwipeCore from "swiper";
+import { Navigation } from "swiper/modules";
+import "swiper/css/bundle";
+
 export default function Listing() {
+  SwipeCore.use([Navigation]);
   const params = useParams();
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -37,7 +43,21 @@ export default function Listing() {
         ""
       )}
       {listing && !loading && !error && (
-        <h1 className="text-2xl">{listing.name}</h1>
+        <div>
+          <Swiper navigation>
+            {listing.imageUrls.map((url) => (
+              <SwiperSlide key={url}>
+                <div
+                  className="h-[550px]"
+                  style={{
+                    background: `url(${url}) center no-repeat`,
+                    backgroundSize: "cover",
+                  }}
+                ></div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
       )}
     </main>
   );
