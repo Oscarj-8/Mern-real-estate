@@ -18,6 +18,7 @@ export default function Listing() {
         }
         setListing(data);
         setLoading(false);
+        setError(false);
       } catch (error) {
         setError(true);
         setLoading(false);
@@ -25,7 +26,19 @@ export default function Listing() {
     };
 
     fetchListing();
-  });
+  }, [params.listingId]);
 
-  return <div>{listing && listing.name}</div>;
+  return (
+    <main>
+      {loading ? <p className="text-center text-2xl my-7">Loading ...</p> : ""}
+      {error ? (
+        <p className="text-center text-2xl my-7">Something went wrong</p>
+      ) : (
+        ""
+      )}
+      {listing && !loading && !error && (
+        <h1 className="text-2xl">{listing.name}</h1>
+      )}
+    </main>
+  );
 }
