@@ -66,11 +66,11 @@ export default function UpdateListing() {
           setUploading(false);
         })
         .catch((err) => {
-          setImageUploadError("Image uplaod failed (2 mb max per image )", err);
+          setImageUploadError("Image upload failed (2 mb max per image )", err);
           setUploading(false);
         });
     } else {
-      setImageUploadError("You can only uplaod 6 images per listing");
+      setImageUploadError("You can only upload 6 images per listing");
       setUploading(false);
     }
   };
@@ -110,30 +110,48 @@ export default function UpdateListing() {
 
   const handleChange = (e) => {
     if (e.target.id === "sale" || e.target.id === "rent") {
-      setFormData({ ...formData, type: e.target.id });
-    } else if (
-      e.target.id == "parking" ||
-      e.target.id == "offer" ||
-      e.target.id == "furnished"
+      setFormData({
+        ...formData,
+        type: e.target.id,
+      });
+    }
+
+    if (
+      e.target.id === "parking" ||
+      e.target.id === "furnished" ||
+      e.target.id === "offer"
     ) {
-      setFormData({ ...formData, [e.target.id]: e.target.checked });
-    } else {
-      setFormData({ ...formData, [e.target.id]: e.target.value });
+      setFormData({
+        ...formData,
+        [e.target.id]: e.target.checked,
+      });
+    }
+
+    if (
+      e.target.type === "number" ||
+      e.target.type === "text" ||
+      e.target.type === "textarea"
+    ) {
+      setFormData({
+        ...formData,
+        [e.target.id]: e.target.value,
+      });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.imageUrls.length < 1)
-      return setError("You must atleast upload one image");
-    if (formData.regularPrice < formData.discountedPrice)
-      return setError("Discounted price must be less than regular price");
-    console.log("Form Data:", formData);
+
     try {
+      if (formData.imageUrls.length < 1)
+        return setError("You must atleast upload one image");
+      if (+formData.regularPrice < +formData.discountedPrice)
+        return setError("Discounted price must be less than regular price");
+      console.log("Form Data:", formData);
       setLoading(true);
       setError(false);
 
-      const res = await fetch("/api/listing/create", {
+      const res = await fetch(`/api/listing/update/${params.listingId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -200,7 +218,7 @@ export default function UpdateListing() {
                 className="w-5"
                 id="sale"
                 onChange={handleChange}
-                value={formData.type === "sale"}
+                checked={formData.type === "sale"}
               />
               <span>Sell</span>
             </div>
@@ -211,7 +229,7 @@ export default function UpdateListing() {
                 className="w-5"
                 id="rent"
                 onChange={handleChange}
-                value={formData.type === "rent"}
+                checked={formData.type === "rent"}
               />
               <span>Rent</span>
             </div>
@@ -222,7 +240,7 @@ export default function UpdateListing() {
                 className="w-5"
                 id="parking"
                 onChange={handleChange}
-                value={formData.type === "parking"}
+                checked={formData.parking}
               />
               <span>Parking spot</span>
             </div>
@@ -233,7 +251,7 @@ export default function UpdateListing() {
                 className="w-5"
                 id="furnished"
                 onChange={handleChange}
-                value={formData.type === "furnished"}
+                checked={formData.furnished}
               />
               <span>Furnished</span>
             </div>
@@ -244,7 +262,7 @@ export default function UpdateListing() {
                 className="w-5"
                 id="offer"
                 onChange={handleChange}
-                value={formData.type === "offer"}
+                checked={formData.offer}
               />
               <span>Offer</span>
             </div>
@@ -369,7 +387,7 @@ export default function UpdateListing() {
             disabled={loading || uploading}
             className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-90 disabled:opacity-80"
           >
-            {loading ? "YUpdating..." : "Update List"}
+            {loading ? "Updating..." : "Update List"}
           </button>
           {error && <p className="text-red-700 text-sm">{error}</p>}
         </div>
