@@ -12,8 +12,11 @@ import {
   FaParking,
   FaShare,
 } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 export default function Listing() {
+  const { currentUser } = useSelector((state) => state.user);
+
   SwipeCore.use([Navigation]);
   const params = useParams();
   const [listing, setListing] = useState(null);
@@ -41,7 +44,7 @@ export default function Listing() {
 
     fetchListing();
   }, [params.listingId]);
-
+  console.log(currentUser._id, listing?.userRef);
   return (
     <main>
       {loading ? <p className="text-center text-2xl my-7">Loading ...</p> : ""}
@@ -131,6 +134,11 @@ export default function Listing() {
                 {listing.furnished ? "Furnished" : "Not furnished"}
               </li>
             </ul>
+            {currentUser && listing.userRef !== currentUser._id && (
+              <button className="bg-slate-700 p-3 rounded-lg text-white uppercase hover:opacity-95">
+                Conact Landlord
+              </button>
+            )}
           </div>
         </div>
       )}
