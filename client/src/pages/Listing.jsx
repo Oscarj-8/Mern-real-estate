@@ -13,6 +13,7 @@ import {
   FaShare,
 } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import Contact from "../components/Contact";
 
 export default function Listing() {
   const { currentUser } = useSelector((state) => state.user);
@@ -23,6 +24,7 @@ export default function Listing() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [contact, setContact] = useState(false);
   useEffect(() => {
     const fetchListing = async () => {
       try {
@@ -134,11 +136,15 @@ export default function Listing() {
                 {listing.furnished ? "Furnished" : "Not furnished"}
               </li>
             </ul>
-            {currentUser && listing.userRef !== currentUser._id && (
-              <button className="bg-slate-700 p-3 rounded-lg text-white uppercase hover:opacity-95">
+            {currentUser && listing.userRef !== currentUser._id && !contact && (
+              <button
+                onClick={() => setContact(true)}
+                className="bg-slate-700 p-3 rounded-lg text-white uppercase hover:opacity-95"
+              >
                 Conact Landlord
               </button>
             )}
+            {contact && <Contact />}
           </div>
         </div>
       )}
