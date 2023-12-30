@@ -46,7 +46,7 @@ export default function Listing() {
 
     fetchListing();
   }, [params.listingId]);
-  console.log(currentUser._id, listing?.userRef);
+
   return (
     <main>
       {loading ? <p className="text-center text-2xl my-7">Loading ...</p> : ""}

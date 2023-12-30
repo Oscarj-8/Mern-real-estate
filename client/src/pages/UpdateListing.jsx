@@ -147,7 +147,7 @@ export default function UpdateListing() {
         return setError("You must atleast upload one image");
       if (+formData.regularPrice < +formData.discountedPrice)
         return setError("Discounted price must be less than regular price");
-      console.log("Form Data:", formData);
+
       setLoading(true);
       setError(false);
 

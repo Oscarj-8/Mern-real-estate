@@ -30,7 +30,6 @@ export default function CreateListing() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  console.log(formData);
 
   const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
@@ -130,7 +129,7 @@ export default function CreateListing() {
       return setError("You must atleast upload one image");
     if (formData.regularPrice < formData.discountedPrice)
       return setError("Discounted price must be less than regular price");
-    console.log("Form Data:", formData);
+
     try {
       setLoading(true);
       setError(false);
