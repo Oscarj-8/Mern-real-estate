@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/bundle";
 import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
-
+import ListingItem from "../components/ListingItem";
 export default function Home() {
   const [offerListings, setOfferListings] = useState([]);
   const [saleListings, setSaleListings] = useState([]);
@@ -90,6 +90,21 @@ export default function Home() {
       </Swiper>
 
       {/*listing result*/}
+      <div className="max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10">
+        {offerListings && offerListings.length > 0 && (
+          <div>
+            <div className="div">
+              <h2>Recent Offers</h2>
+              <Link to={"/search?offer=true"}>Show more offers</Link>
+            </div>
+            <div className="div">
+              {offerListings.map((listing) => (
+                <ListingItem listing={listing} key={listing._id} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
