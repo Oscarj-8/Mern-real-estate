@@ -57,6 +57,5 @@ Contact.propTypes = {
   listing: PropTypes.shape({
     userRef: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    // Add other PropTypes for the properties you are using in the component
   }).isRequired,
 };
