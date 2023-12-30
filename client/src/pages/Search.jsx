@@ -209,7 +209,7 @@ export default function Search() {
         </form>
       </div>
       <div className="flex-1">
-        <h1 className="text-3xl font-semibold border-b text-slate-700 mt-5 ">
+        <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5 ">
           Listing results
         </h1>
         <div className="flex flex-wrap gap-4 p-7">
@@ -224,7 +224,7 @@ export default function Search() {
           {!loading &&
             listings &&
             listings.map((listing) => (
-              <ListingItem key={listing.id} listing={listing} />
+              <ListingItem key={listing.name} listing={listing} />
             ))}
         </div>
       </div>
