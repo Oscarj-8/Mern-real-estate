@@ -128,8 +128,8 @@ export default function Listing() {
               <li className="flex gap-1 whitespace-nowrap items-center text-green-900 font-semibold text-sm">
                 <FaBath className="text-lg" />
                 {listing.bathrooms > 1
-                  ? `${listing.bathrooms} beds`
-                  : `${listing.bathrooms} bed`}
+                  ? `${listing.bathrooms} baths`
+                  : `${listing.bathrooms} bath`}
               </li>
               <li className="flex gap-1 whitespace-nowrap items-center text-green-900 font-semibold text-sm">
                 <FaParking className="text-lg" />
