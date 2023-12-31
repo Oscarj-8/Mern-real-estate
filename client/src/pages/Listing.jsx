@@ -46,7 +46,7 @@ export default function Listing() {
 
     fetchListing();
   }, [params.listingId]);
-  console.log(currentUser._id, listing?.userRef);
+
   return (
     <main>
       {loading ? <p className="text-center text-2xl my-7">Loading ...</p> : ""}
@@ -95,7 +95,7 @@ export default function Listing() {
                 : listing.regularPrice.toLocaleString("en-US")}
               {listing.type === "rent" && " / month"}
             </p>
-            <p className="flex items-center mt-6 gap-2 text-slate-600  text-sm">
+            <p className="flex items-center gap-2 text-slate-600  text-sm">
               <FaMapMarkerAlt className="text-green-700" />
               {listing.address}
             </p>
@@ -106,7 +106,11 @@ export default function Listing() {
               </p>
               {listing.offer && (
                 <p className="bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
-                  ${+listing.regularPrice - +listing.discountedPrice} OFF
+                  $
+                  {(
+                    +listing.regularPrice - +listing.discountedPrice
+                  ).toLocaleString("en-US")}{" "}
+                  OFF
                 </p>
               )}
             </div>
@@ -129,7 +133,7 @@ export default function Listing() {
               </li>
               <li className="flex gap-1 whitespace-nowrap items-center text-green-900 font-semibold text-sm">
                 <FaParking className="text-lg" />
-                {listing.bathrooms ? "Parking sport" : "No parking"}
+                {listing.parking ? "Parking spot" : "No parking"}
               </li>
               <li className="flex gap-1 whitespace-nowrap items-center text-green-900 font-semibold text-sm">
                 <FaChair className="text-lg" />
