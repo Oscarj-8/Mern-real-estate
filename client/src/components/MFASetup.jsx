@@ -8,7 +8,7 @@ const MFASetup = () => {
 
   const setupMFA = async () => {
     try {
-      const response = await fetch("/setup");
+      const response = await fetch("http://localhost:3000/setup");
       if (!response.ok) {
         throw new Error("Failed to fetch QR code");
       }
@@ -22,7 +22,7 @@ const MFASetup = () => {
 
   const verifyToken = async () => {
     try {
-      const response = await fetch("/verify", {
+      const response = await fetch("http://localhost:3000/verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,21 +40,34 @@ const MFASetup = () => {
   };
 
   return (
-    <div>
-      <button onClick={setupMFA}>Setup MFA</button>
-      {qrCode && <img src={qrCode} alt="QR Code" />}
-      {secret && (
-        <div>
-          <input
-            type="text"
-            placeholder="Enter token from Google Authenticator"
-            value={token}
-            onChange={(e) => setToken(e.target.value)}
-          />
-          <button onClick={verifyToken}>Verify</button>
-        </div>
-      )}
-      {verificationStatus && <p>{verificationStatus}</p>}
+    <div className="flex flex-col gap-2 items-center">
+      <button
+        className="border p-3 rounded-md bg-slate-700 text-white"
+        onClick={setupMFA}
+      >
+        Setup MFA
+      </button>
+      <div className="flex flex-col items-center">
+        {qrCode && <img src={qrCode} alt="QR Code" />}
+        {secret && (
+          <div className="flex flex-col gap-2">
+            <input
+              className="p-3 border text-[12px]"
+              type="text"
+              placeholder="Enter token from Google Authenticator"
+              value={token}
+              onChange={(e) => setToken(e.target.value)}
+            />
+            <button
+              className="flex-1 bg-slate-700 text-white p-3 rounded-md hover:bg-slate-500"
+              onClick={verifyToken}
+            >
+              Verify
+            </button>
+          </div>
+        )}
+        {verificationStatus && <p>{verificationStatus}</p>}
+      </div>
     </div>
   );
 };
