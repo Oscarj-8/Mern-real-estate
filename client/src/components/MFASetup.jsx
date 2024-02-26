@@ -45,7 +45,7 @@ const MFASetup = () => {
         className="border p-3 rounded-md bg-slate-700 text-white"
         onClick={setupMFA}
       >
-        Setup MFA
+        Enable MFA
       </button>
       <div className="flex flex-col items-center">
         {qrCode && <img src={qrCode} alt="QR Code" />}
