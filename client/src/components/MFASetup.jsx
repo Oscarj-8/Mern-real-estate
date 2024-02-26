@@ -8,7 +8,7 @@ const MFASetup = () => {
 
   const setupMFA = async () => {
     try {
-      const response = await fetch("http://localhost:3000/setup");
+      const response = await fetch("/api/auth-app");
       if (!response.ok) {
         throw new Error("Failed to fetch QR code");
       }
@@ -22,7 +22,7 @@ const MFASetup = () => {
 
   const verifyToken = async () => {
     try {
-      const response = await fetch("http://localhost:3000/verify", {
+      const response = await fetch("/api/verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,6 +34,9 @@ const MFASetup = () => {
       }
       const data = await response.json();
       setVerificationStatus(data.verified ? "Success" : "Failed");
+      setTimeout(() => {
+        setVerificationStatus("");
+      }, 5000);
     } catch (error) {
       console.error("Error verifying token:", error);
     }
@@ -66,7 +69,9 @@ const MFASetup = () => {
             </button>
           </div>
         )}
-        {verificationStatus && <p>{verificationStatus}</p>}
+        {verificationStatus && (
+          <p className="text-green-700 mt-4">{verificationStatus}</p>
+        )}
       </div>
     </div>
   );

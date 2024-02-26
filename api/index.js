@@ -1,11 +1,10 @@
 import express from "express";
 import mongoose from "mongoose";
-import speakeasy from "speakeasy";
-import qr from "qrcode";
 import dotenv from "dotenv";
 import userRouter from "./routes/user.route.js";
 import authRouter from "./routes/auth.route.js";
 import listingRouter from "./routes/listing.route.js";
+import mfaRouter from "./routes/mfaApp.route.js";
 import cookieParser from "cookie-parser";
 import path from "path";
 import cors from "cors";
@@ -33,30 +32,10 @@ app.listen(3000, () => {
   console.log("Server is running on port 3000!!!");
 });
 
-app.get("/setup", (req, res) => {
-  const secret = speakeasy.generateSecret();
-  qr.toDataURL(secret.otpauth_url, (err, data) => {
-    if (err) {
-      res.status(500).json({ message: "Error generating QR code" });
-    } else {
-      res.json({ secret: secret.base32, qrCode: data });
-    }
-  });
-});
-
-app.post("/verify", (req, res) => {
-  const { secret, token } = req.body;
-  const verified = speakeasy.totp.verify({
-    secret,
-    encoding: "base32",
-    token,
-  });
-  res.json({ verified });
-});
-
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
+app.use("/api", mfaRouter);
 
 app.use(express.static(path.join(__dirname, "/client/dist")));
 
