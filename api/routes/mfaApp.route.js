@@ -1,7 +1,7 @@
 import express from "express";
 import speakeasy from "speakeasy";
 import qr from "qrcode";
-
+import User from "../models/user.model.js";
 const router = express.Router();
 
 router.get("/auth-app", (req, res) => {
@@ -17,7 +17,7 @@ router.get("/auth-app", (req, res) => {
 
 router.put("/update-mfa-status", async (req, res) => {
   try {
-    const userId = req.user.id;
+    const { userId, isTwoFactorAuthEnabled } = req.body;
 
     await User.findByIdAndUpdate(userId, { isTwoFactorAuthEnabled: true });
 
