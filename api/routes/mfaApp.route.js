@@ -4,15 +4,30 @@ import qr from "qrcode";
 import User from "../models/user.model.js";
 const router = express.Router();
 
-router.get("/auth-app", (req, res) => {
-  const secret = speakeasy.generateSecret();
-  qr.toDataURL(secret.otpauth_url, (err, data) => {
-    if (err) {
-      res.status(500).json({ message: "Error generating QR code" });
-    } else {
-      res.json({ secret: secret.base32, qrCode: data });
+router.get("/auth-app", async (req, res) => {
+  try {
+    const userId = req.query.userId;
+    let user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
-  });
+
+    if (!user.mfaQrCode || !user.mfaSecret) {
+      const secret = speakeasy.generateSecret();
+      qr.toDataURL(secret.otpauth_url, async (err, data) => {
+        if (err) {
+          return res.status(500).json({ message: "Error generating QR code" });
+        }
+        user.mfaSecret = secret.base32;
+        user.mfaQrCode = data;
+        await user.save();
+        res.json({ secret: secret.base32, qrCode: data });
+      });
+    } else {
+      res.json({ secret: user.mfaSecret, qrCode: user.mfaQrCode });
+    }
+  } catch (err) {}
 });
 
 router.put("/update-mfa-status", async (req, res) => {
