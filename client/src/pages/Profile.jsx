@@ -22,6 +22,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 export default function Profile() {
+  const [authDiv, setAuthDiv] = useState(false);
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const fileRef = useRef(null);
   const dispatch = useDispatch();
@@ -160,8 +161,25 @@ export default function Profile() {
   };
 
   return (
-    <div className="p-3 max-w-lg mx-auto">
+    <div className="relative p-3 max-w-lg mx-auto">
       <h1 className="text-center text-3xl font-semibold my-7">Profile</h1>
+      <button
+        onClick={() => setAuthDiv(!authDiv)}
+        className="bg-green-700 text-white text-xs text-center p-2 rounded-lg hover:opacity-90
+        "
+      >
+        Authentication
+      </button>
+      {authDiv && (
+        <div className="absolute transition-all duration-1000 ease-in-out p-2 bg-white shadow-lg">
+          <ul className="flex flex-col gap-2">
+            <li>
+              <Link to={"/auth-app"}>Authenticator app</Link>
+            </li>
+            <li>SMS/Text message</li>
+          </ul>
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           onChange={(e) => setFile(e.target.files[0])}
