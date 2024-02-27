@@ -53,4 +53,20 @@ router.post("/verify", (req, res) => {
   res.json({ verified });
 });
 
+router.post("/login-verify", async (req, res) => {
+  const { userId, token } = req.body;
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const verified = speakeasy.totp.verify({
+    secret: user.mfaSecret,
+    encoding: "base32",
+    token,
+  });
+  res.json({ verified });
+});
+
 export default router;

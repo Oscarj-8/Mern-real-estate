@@ -11,6 +11,7 @@ import UpdateListing from "./pages/UpdateListing";
 import Listing from "./pages/Listing";
 import Search from "./pages/Search";
 import MFASetupPage from "./pages/MFASetupPage";
+import AuthenticationCodePage from "./pages/AuthenticationCodePage";
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
           />
         </Route>
         <Route path="/auth-app" element={<MFASetupPage />} />
+        <Route path="/enter-code" element={<AuthenticationCodePage />} />
       </Routes>
     </BrowserRouter>
   );
