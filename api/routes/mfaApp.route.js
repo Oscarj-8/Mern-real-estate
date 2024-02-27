@@ -15,6 +15,19 @@ router.get("/auth-app", (req, res) => {
   });
 });
 
+router.put("/update-mfa-status", async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    await User.findByIdAndUpdate(userId, { isTwoFactorAuthEnabled: true });
+
+    res.status(200).json({ message: "MFA enabled successfully" });
+  } catch (error) {
+    console.error("Error enabling MFA:", error);
+    res.status(500).json({ message: "Failed to enable MFA" });
+  }
+});
+
 router.post("/verify", (req, res) => {
   const { secret, token } = req.body;
   const verified = speakeasy.totp.verify({

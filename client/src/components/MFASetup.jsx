@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const MFASetup = () => {
   const [qrCode, setQRCode] = useState("");
   const [secret, setSecret] = useState("");
   const [token, setToken] = useState("");
   const [verificationStatus, setVerificationStatus] = useState("");
+  const { currentUser } = useSelector((state) => state.user);
 
   const setupMFA = async () => {
     try {
@@ -15,6 +17,20 @@ const MFASetup = () => {
       const data = await response.json();
       setQRCode(data.qrCode);
       setSecret(data.secret);
+
+      const updateResponse = await fetch("/api/update-mfa-status", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: currentUser._id,
+          isTwoFactorAuthEnabled: true,
+        }),
+      });
+      if (!updateResponse.ok) {
+        throw new Error("Failed to enable MFA");
+      }
     } catch (error) {
       console.error("Error setting up MFA:", error);
     }
@@ -55,7 +71,7 @@ const MFASetup = () => {
         {secret && (
           <div className="flex flex-col gap-2">
             <input
-              className="p-3 border text-[12px]"
+              className="p-3 border"
               type="text"
               placeholder="Enter token from Google Authenticator"
               value={token}
