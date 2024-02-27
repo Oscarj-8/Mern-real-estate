@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signInSuccess, signInFailure } from "../redux/user/userSlice";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 const AuthenticationCodePage = () => {
   const { error } = useSelector((state) => state.user);
   const [token, setToken] = useState("");
+  const [timeoutExpired, setTimeoutExprired] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,6 +37,19 @@ const AuthenticationCodePage = () => {
       dispatch(signInFailure(error.message));
     }
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimeoutExprired(true);
+    }, 30000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (timeoutExpired) navigate("/sign-in");
+    dispatch(signInFailure("Timeout expired"));
+  }, [timeoutExpired, navigate]);
 
   return (
     <div className="container">
