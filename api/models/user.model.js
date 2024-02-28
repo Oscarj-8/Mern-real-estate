@@ -1,5 +1,16 @@
 import mongoose from "mongoose";
 
+const deviceSchema = new mongoose.Schema({
+  deviceInformation: {
+    type: String,
+    required: true,
+  },
+  isTwoFactorAuthCompleted: {
+    type: Boolean,
+    default: false,
+  },
+});
+
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -33,10 +44,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    devices: {
-      type: String,
-      default: [],
-    },
+    devices: [deviceSchema],
   },
   { timestamps: true }
 );
