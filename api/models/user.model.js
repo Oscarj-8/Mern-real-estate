@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    devices: {
+      type: String,
+      default: [],
+    },
   },
   { timestamps: true }
 );
