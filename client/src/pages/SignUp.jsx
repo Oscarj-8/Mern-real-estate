@@ -7,11 +7,19 @@ export default function SignUp() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const deviceInformation = {
+    userAgent: navigator.userAgent,
+    screenWidth: window.screen.width,
+    screenHeight: window.screen.height,
+  };
+
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [e.target.id]: e.target.value,
-    });
+      deviceInformation,
+    }));
+    console.log(deviceInformation);
   };
 
   const handleSubmit = async (e) => {
@@ -41,7 +49,6 @@ export default function SignUp() {
       setError(error.message);
     }
   };
-
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl text-center font-semibold my-7">Sign Up</h1>

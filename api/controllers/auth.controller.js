@@ -4,9 +4,14 @@ import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 import speakeasy from "speakeasy";
 export const signup = async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, deviceInformation } = req.body;
   const hashedPassword = bcrypt.hashSync(password, 10);
-  const newUser = new User({ username, email, password: hashedPassword });
+  const newUser = new User({
+    username,
+    email,
+    password: hashedPassword,
+    devices: [deviceInformation],
+  });
 
   try {
     await newUser.save();
