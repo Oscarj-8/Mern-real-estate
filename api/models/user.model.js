@@ -1,5 +1,20 @@
 import mongoose from "mongoose";
 
+const deviceSchema = new mongoose.Schema({
+  userAgent: {
+    type: String,
+    required: true,
+  },
+  screenWidth: {
+    type: Number,
+    required: true,
+  },
+  screenHeight: {
+    type: Number,
+    required: true,
+  },
+});
+
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -32,6 +47,10 @@ const userSchema = new mongoose.Schema(
     mfaQrCode: {
       type: String,
       default: null,
+    },
+    devices: {
+      type: [deviceSchema],
+      required: true,
     },
   },
   { timestamps: true }
