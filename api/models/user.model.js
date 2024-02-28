@@ -1,13 +1,17 @@
 import mongoose from "mongoose";
 
 const deviceSchema = new mongoose.Schema({
-  deviceInformation: {
+  userAgent: {
     type: String,
     required: true,
   },
-  isTwoFactorAuthCompleted: {
-    type: Boolean,
-    default: false,
+  screenWidth: {
+    type: Number,
+    required: true,
+  },
+  screenHeight: {
+    type: Number,
+    required: true,
   },
 });
 
@@ -44,7 +48,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    devices: [deviceSchema],
+    devices: {
+      type: [deviceSchema],
+      required: true,
+    },
   },
   { timestamps: true }
 );
